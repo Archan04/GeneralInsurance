@@ -6,73 +6,95 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PAYMENT")
+@Table(name = "payment")
 public class Payment {
 	
 	@Id
-	@SequenceGenerator(name = "payment_id", initialValue = 1, allocationSize = 1)
-	@GeneratedValue
-	private int id;
-
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_payment_seq")
+	@SequenceGenerator(sequenceName = "payment_seq", allocationSize = 1, name = "my_payment_seq")
+	@Column(name = "payment_id")
+	private int paymentId;
+	
+	@Column(name = "insurance_price")
+	private int insurancePrice;
+	
 	@Column(name = "payment_mode")
-	private String mode;
-
+	private String paymentMode;
+	
+	@Column(name = "payment_status")
+	private String paymentStatus;
+	
+	@Column(name = "insurance_status")
+	private String insuranceStatus;
+	
 	@Column(name = "payment_date")
-	private LocalDate date;
+	private LocalDate paymentDate;
+	
+	@OneToOne(cascade = { CascadeType.PERSIST,CascadeType.MERGE, CascadeType.REMOVE })
+	@JoinColumn(name = "policy_no")
+	private MotorInsurance motorInsurance;
 
-	@Column(name = "payment_amount")
-	private double amount;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
-
-	public int getId() {
-		return id;
+	public int getPaymentId() {
+		return paymentId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setPaymentId(int paymentId) {
+		this.paymentId = paymentId;
 	}
 
-	public String getMode() {
-		return mode;
+	public int getInsurancePrice() {
+		return insurancePrice;
 	}
 
-	public void setMode(String mode) {
-		this.mode = mode;
+	public void setInsurancePrice(int insurancePrice) {
+		this.insurancePrice = insurancePrice;
 	}
 
-	public LocalDate getDate() {
-		return date;
+	public String getPaymentMode() {
+		return paymentMode;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setPaymentMode(String paymentMode) {
+		this.paymentMode = paymentMode;
 	}
 
-	public double getAmount() {
-		return amount;
+	public String getPaymentStatus() {
+		return paymentStatus;
 	}
 
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
-	public Customer getCustomer() {
-		return customer;
+	public String getInsuranceStatus() {
+		return insuranceStatus;
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setInsuranceStatus(String insuranceStatus) {
+		this.insuranceStatus = insuranceStatus;
+	}
+
+	public LocalDate getPaymentDate() {
+		return paymentDate;
+	}
+
+	public void setPaymentDate(LocalDate paymentDate) {
+		this.paymentDate = paymentDate;
 	}
 	
-	
+	public MotorInsurance getMotorInsurance() {
+		return motorInsurance;
+	}
+
+	public void setMotorInsurance(MotorInsurance motorInsurance) {
+		this.motorInsurance = motorInsurance;
+	}
 }
